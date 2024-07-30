@@ -1,3 +1,36 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import *
+
+
+class ApartmentsImagesInline(admin.TabularInline):
+    model = ApartmentsImages
+    extra = 1
+
+
+@admin.register(Buildings)
+class BuildingAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "year", "city", "street", "number")
+    list_display_links = ("id", "name")
+    list_per_page = 20
+    search_fields = ("name", "city", "street", "number")
+    list_filter = ("year", "city")
+
+
+@admin.register(Apartments)
+class ApartmentsAdmin(admin.ModelAdmin):
+    list_display = ("id", "building", "area", "rooms", "price", "floor")
+    list_display_links = ("id", "building")
+    list_per_page = 20
+    search_fields = ("building",)
+    list_filter = ("rooms", "floor")
+    inlines = [ApartmentsImagesInline]
+
+
+@admin.register(ApartmentsImages)
+class ApartmentsImagesAdmin(admin.ModelAdmin):
+    list_display = ("id", "apartment")
+    list_display_links = ("id", "apartment")
+    list_per_page = 20
+    search_fields = ("apartment",)
+    list_filter = ("apartment",)
