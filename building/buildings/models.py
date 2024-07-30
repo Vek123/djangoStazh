@@ -116,7 +116,7 @@ class ApartmentsImages(models.Model):
         if os.path.exists(path):
             os.remove(path)
         super().save(
-            force_insert=False,
+            force_insert=force_insert,
             force_update=force_update,
             using=using,
             update_fields=update_fields,
