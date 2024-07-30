@@ -84,20 +84,18 @@ class ApartmentsImages(models.Model):
         super().delete(using=using, keep_parents=keep_parents)
 
     def save(
-            self,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None,
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None
     ):
-        path = (
-            f"{settings.MEDIA_ROOT}\\"
-            f"{ApartmentsImages.objects.get(pk=self.pk).image.name}".replace(
-                "/", "\\"
-            )
-        )
+        old_version = ApartmentsImages.objects.get(pk=self.pk)
+        path = old_version.image.path
+
         if os.path.exists(path):
             os.remove(path)
+        
         super().save(
             force_insert=force_insert,
             force_update=force_update,
