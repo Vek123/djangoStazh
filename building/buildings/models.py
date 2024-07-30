@@ -73,7 +73,8 @@ class ApartmentsImages(models.Model):
         on_delete=models.CASCADE,
     )
     image = models.ImageField(
-        upload_to=make_apartment_image_save_path, verbose_name=_("Image")
+        upload_to=make_apartment_image_save_path,
+        verbose_name=_("Image")
     )
 
     def delete(self, using=None, keep_parents=False):
