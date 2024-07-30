@@ -3,10 +3,9 @@ import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from building import settings
+from django.conf import settings
 
 
-# Create your models here.
 class Buildings(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=100, blank=True)
     year = models.IntegerField(verbose_name=_("Year"))
@@ -24,26 +23,11 @@ class Buildings(models.Model):
 
 class Apartments(models.Model):
     class RoomsChoices(models.TextChoices):
-        ONE = (
-            "1",
-            "1",
-        )
-        TWO = (
-            "2",
-            "2",
-        )
-        THREE = (
-            "3",
-            "3",
-        )
-        FOUR_PLUS = (
-            "4+",
-            "4+",
-        )
-        STUDIO = (
-            "STUDIO",
-            _("Studio"),
-        )
+        ONE = ("1", "1")
+        TWO = ("2", "2")
+        THREE = ("3", "3")
+        FOUR_PLUS = ("4+", "4+")
+        STUDIO = ("STUDIO", _("Studio"))
 
     area = models.DecimalField(
         verbose_name=_("Area"), max_digits=5, decimal_places=2
@@ -74,7 +58,7 @@ class Apartments(models.Model):
 
 
 def make_apartment_image_save_path(
-    instance: "ApartmentsImages", filename: str
+        instance: "ApartmentsImages", filename: str
 ) -> str:
     building = instance.apartment.building
     address_string = (
@@ -95,17 +79,16 @@ class ApartmentsImages(models.Model):
     )
 
     def delete(self, using=None, keep_parents=False):
-        path = f"{settings.MEDIA_ROOT}\\{self.image.name}".replace("/", "\\")
-        if os.path.exists(path):
-            os.remove(path)
+        if os.path.exists(self.image.path):
+            os.remove(self.image.path)
         super().delete(using=using, keep_parents=keep_parents)
 
     def save(
-        self,
-        force_insert=False,
-        force_update=False,
-        using=None,
-        update_fields=None,
+            self,
+            force_insert=False,
+            force_update=False,
+            using=None,
+            update_fields=None,
     ):
         path = (
             f"{settings.MEDIA_ROOT}\\"
