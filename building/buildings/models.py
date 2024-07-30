@@ -3,8 +3,6 @@ import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django.conf import settings
-
 
 class Buildings(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=100, blank=True)
@@ -30,7 +28,9 @@ class Apartments(models.Model):
         STUDIO = ("STUDIO", _("Studio"))
 
     area = models.DecimalField(
-        verbose_name=_("Area"), max_digits=5, decimal_places=2
+        verbose_name=_("Area"),
+        max_digits=5,
+        decimal_places=2,
     )
     rooms = models.CharField(
         verbose_name=_("Rooms"),
@@ -39,7 +39,9 @@ class Apartments(models.Model):
         max_length=20,
     )
     price = models.DecimalField(
-        verbose_name=_("Price"), max_digits=19, decimal_places=2
+        verbose_name=_("Price"),
+        max_digits=19,
+        decimal_places=2,
     )
     floor = models.PositiveIntegerField(verbose_name=_("Floor"))
     building = models.ForeignKey(
@@ -57,13 +59,9 @@ class Apartments(models.Model):
         return f"{self.building} apartment"
 
 
-def make_apartment_image_save_path(
-        instance: "ApartmentsImages", filename: str
-) -> str:
+def make_apartment_image_save_path(instance: "ApartmentsImages", filename: str) -> str:
     building = instance.apartment.building
-    address_string = (
-        f"{building.city} {building.street} {building.number}".strip()
-    )
+    address_string = f"{building.city} {building.street} {building.number}".strip()
     return "images/catalog/%s/%s" % (address_string, filename)
 
 
@@ -88,14 +86,14 @@ class ApartmentsImages(models.Model):
         force_insert=False,
         force_update=False,
         using=None,
-        update_fields=None
+        update_fields=None,
     ):
         old_version = ApartmentsImages.objects.get(pk=self.pk)
         path = old_version.image.path
 
         if os.path.exists(path):
             os.remove(path)
-        
+
         super().save(
             force_insert=force_insert,
             force_update=force_update,

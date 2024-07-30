@@ -96,7 +96,7 @@ class Migration(migrations.Migration):
                 (
                     "image",
                     models.ImageField(
-                        upload_to=buildings.models.ApartmentsImages.upload_to,
+                        upload_to=buildings.models.make_apartment_image_save_path,
                         verbose_name="Image",
                     ),
                 ),
