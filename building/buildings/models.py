@@ -74,7 +74,7 @@ class ApartmentsImages(models.Model):
     )
     image = models.ImageField(
         upload_to=make_apartment_image_save_path,
-        verbose_name=_("Image")
+        verbose_name=_("Image"),
     )
 
     def delete(self, using=None, keep_parents=False):
