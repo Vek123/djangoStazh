@@ -2,7 +2,6 @@ import os
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Building(models.Model):
@@ -92,18 +91,12 @@ class ApartmentImage(models.Model):
     ):
         try:
             old_version = ApartmentImage.objects.get(pk=self.pk)
-        except ObjectDoesNotExist:
-            super().save(
-                force_insert=force_insert,
-                force_update=force_update,
-                using=using,
-                update_fields=update_fields,
-            )
-            return 0
-        path = old_version.image.path
+            path = old_version.image.path
 
-        if os.path.exists(path) and self.image != old_version.image:
-            os.remove(path)
+            if os.path.exists(path) and self.image != old_version.image:
+                os.remove(path)
+        except ApartmentImage.DoesNotExists:
+            pass
 
         super().save(
             force_insert=force_insert,
