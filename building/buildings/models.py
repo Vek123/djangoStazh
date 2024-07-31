@@ -89,11 +89,14 @@ class ApartmentImage(models.Model):
         using=None,
         update_fields=None,
     ):
-        old_version = ApartmentImage.objects.get(pk=self.pk)
-        path = old_version.image.path
+        try:
+            old_version = ApartmentImage.objects.get(pk=self.pk)
+            path = old_version.image.path
 
-        if os.path.exists(path):
-            os.remove(path)
+            if os.path.exists(path) and self.image != old_version.image:
+                os.remove(path)
+        except ApartmentImage.DoesNotExists:
+            pass
 
         super().save(
             force_insert=force_insert,
