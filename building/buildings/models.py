@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Buildings(models.Model):
+class Building(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=100, blank=True)
     year = models.IntegerField(verbose_name=_("Year"))
     city = models.CharField(verbose_name=_("City"), max_length=100)
@@ -19,7 +19,7 @@ class Buildings(models.Model):
         return self.name or f"г.{self.city} ул.{self.street} д.{self.number}"
 
 
-class Apartments(models.Model):
+class Apartment(models.Model):
     class RoomsChoices(models.TextChoices):
         ONE = ("1", "1")
         TWO = ("2", "2")
@@ -45,7 +45,7 @@ class Apartments(models.Model):
     )
     floor = models.PositiveIntegerField(verbose_name=_("Floor"))
     building = models.ForeignKey(
-        Buildings,
+        Building,
         related_name="apartments",
         verbose_name=_("Building"),
         on_delete=models.CASCADE,
@@ -59,15 +59,15 @@ class Apartments(models.Model):
         return f"{self.building} apartment"
 
 
-def make_apartment_image_save_path(instance: "ApartmentsImages", filename: str) -> str:
+def make_apartment_image_save_path(instance: "ApartmentImage", filename: str) -> str:
     building = instance.apartment.building
     address_string = f"{building.city} {building.street} {building.number}".strip()
     return "images/catalog/%s/%s" % (address_string, filename)
 
 
-class ApartmentsImages(models.Model):
+class ApartmentImage(models.Model):
     apartment = models.ForeignKey(
-        Apartments,
+        Apartment,
         related_name="images",
         verbose_name=_("Apartment"),
         on_delete=models.CASCADE,
@@ -89,7 +89,7 @@ class ApartmentsImages(models.Model):
         using=None,
         update_fields=None,
     ):
-        old_version = ApartmentsImages.objects.get(pk=self.pk)
+        old_version = ApartmentImage.objects.get(pk=self.pk)
         path = old_version.image.path
 
         if os.path.exists(path):

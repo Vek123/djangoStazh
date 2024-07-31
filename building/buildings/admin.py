@@ -4,11 +4,11 @@ from .models import *
 
 
 class ApartmentsImagesInline(admin.TabularInline):
-    model = ApartmentsImages
+    model = ApartmentImage
     extra = 1
 
 
-@admin.register(Buildings)
+@admin.register(Building)
 class BuildingAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "year", "city", "street", "number")
     list_display_links = ("id", "name")
@@ -17,7 +17,7 @@ class BuildingAdmin(admin.ModelAdmin):
     list_filter = ("year", "city")
 
 
-@admin.register(Apartments)
+@admin.register(Apartment)
 class ApartmentsAdmin(admin.ModelAdmin):
     list_display = ("id", "building", "area", "rooms", "price", "floor")
     list_display_links = ("id", "building")
@@ -27,7 +27,7 @@ class ApartmentsAdmin(admin.ModelAdmin):
     inlines = [ApartmentsImagesInline]
 
 
-@admin.register(ApartmentsImages)
+@admin.register(ApartmentImage)
 class ApartmentsImagesAdmin(admin.ModelAdmin):
     list_display = ("id", "apartment")
     list_display_links = ("id", "apartment")
