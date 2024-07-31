@@ -2,6 +2,8 @@ import os
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
 
 
 class Building(models.Model):
@@ -77,11 +79,6 @@ class ApartmentImage(models.Model):
         verbose_name=_("Image"),
     )
 
-    def delete(self, using=None, keep_parents=False):
-        if os.path.exists(self.image.path):
-            os.remove(self.image.path)
-        super().delete(using=using, keep_parents=keep_parents)
-
     def save(
         self,
         force_insert=False,
@@ -111,3 +108,12 @@ class ApartmentImage(models.Model):
 
     def __str__(self):
         return f"{self.apartment} image"
+
+
+@receiver(pre_delete, sender=ApartmentImage)
+def delete_apartment_image(
+    sender: ApartmentImage,
+    instance: ApartmentImage,
+    **kwargs,
+) -> None:
+    instance.image.delete(False)
