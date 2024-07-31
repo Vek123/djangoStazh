@@ -92,7 +92,7 @@ class ApartmentImage(models.Model):
 
             if os.path.exists(path) and self.image != old_version.image:
                 os.remove(path)
-        except ApartmentImage.DoesNotExists:
+        except ApartmentImage.DoesNotExist:
             pass
 
         super().save(
