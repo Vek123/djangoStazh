@@ -64,7 +64,7 @@ class Apartment(models.Model):
 def make_apartment_image_save_path(instance: "ApartmentImage", filename: str) -> str:
     building = instance.apartment.building
     address_string = f"{building.city} {building.street} {building.number}".strip()
-    return "images/catalog/%s/%s" % (address_string, filename)
+    return "images/apartments/%s/%s" % (address_string, filename)
 
 
 class ApartmentImage(models.Model):
