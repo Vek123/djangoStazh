@@ -96,6 +96,6 @@ class ApartmentImageTestCase(TestCase):
             apartment=self.apartment,
             image=SimpleUploadedFile(self.image_path, b"content"),
         )
-        image.image = SimpleUploadedFile(self.image_path, b"content")
+        image.image = SimpleUploadedFile(self.image_path, b"new_content")
         image.save()
         self.assertTrue(os.path.exists(image.image.path))
