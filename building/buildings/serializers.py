@@ -1,18 +1,16 @@
 from rest_framework import serializers
 
-from buildings.models import *
+from buildings import models
 
 
 class ApartmentImageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
-        representation = super(ApartmentImageSerializer, self).to_representation(
-            instance
-        )
+        representation = super().to_representation(instance)
         image_value = representation.pop("image")
         return image_value
 
     class Meta:
-        model = ApartmentImage
+        model = models.ApartmentImage
         fields = ["image"]
 
 
@@ -25,13 +23,13 @@ class ApartmentSerializer(serializers.ModelSerializer):
         return f"г. {building.city}, ул. {building.street}, д. {building.number}"
 
     class Meta:
-        model = Apartment
+        model = models.Apartment
         fields = ["area", "rooms", "price", "gallery", "floor", "address"]
 
 
 class BuildingApartmentsSerializer(ApartmentSerializer):
     class Meta:
-        model = Apartment
+        model = models.Apartment
         fields = ["area", "rooms", "price", "gallery", "floor"]
 
 
@@ -46,5 +44,5 @@ class BuildingSerializer(serializers.ModelSerializer):
         }
 
     class Meta:
-        model = Building
+        model = models.Building
         fields = ["address", "name", "year"]

@@ -1,10 +1,10 @@
 import django_filters
-from .models import Building, Apartment
+from buildings import models
 
 
 class BuildingFilter(django_filters.FilterSet):
     class Meta:
-        model = Building
+        model = models.Building
         fields = {
             "city": ["exact"],
             "name": ["icontains"],
@@ -13,10 +13,10 @@ class BuildingFilter(django_filters.FilterSet):
 
 
 class ApartmentFilter(django_filters.FilterSet):
-    rooms = django_filters.ChoiceFilter(choices=Apartment.RoomsChoices)
+    rooms = django_filters.ChoiceFilter(choices=models.Apartment.RoomsChoices)
 
     class Meta:
-        model = Apartment
+        model = models.Apartment
         fields = {
             "area": ["exact", "lt", "lte", "gt", "gte"],
             "price": ["exact", "lt", "lte", "gt", "gte"],
