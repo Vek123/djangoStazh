@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from django.views import View
+from django.http import JsonResponse
 
 from buildings import serializers, filters, models
 
@@ -36,3 +38,12 @@ class BuildingModelViewSet(viewsets.ReadOnlyModelViewSet):
             }
         )
         return Response(apartmentsSerializer.data)
+
+
+class FeedbackFormView(View):
+
+    def post(self, request, *args, **kwargs):
+        form = serializers.FeedbackFormSerializer(data=request.POST)
+        response = form.send_email()
+
+        return JsonResponse(response)

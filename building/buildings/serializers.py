@@ -1,4 +1,8 @@
+import smtplib
+
 from rest_framework import serializers
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from buildings import models
 
@@ -46,3 +50,28 @@ class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Building
         fields = ["address", "name", "year"]
+
+
+class FeedbackFormSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    comment = serializers.CharField()
+
+    def send_email(self):
+        if not self.is_valid():
+            return {"status": "is not valid"}
+        data = self.data
+        headers = {'From': f'{settings.SITE_NAME} <{settings.EMAIL_HOST_USER}>'}
+        try:
+            email = EmailMessage(
+                "Ваша заявка принята",
+                f"Уважаемый (ая) {data['name']}. Ваша заявка была принята в работу. Мы отправим Вам письмо на этот адрес эл. почты когда оператор её обработает.\n\nС уважением, команда {settings.SITE_NAME}",
+                settings.EMAIL_HOST_USER,
+                [data['email']],
+                headers=headers,
+            )
+            email.send()
+            return {"status": "success"}
+        except smtplib.SMTPException as e:
+            print(f"Ошибка при отправке письма: {e}")
+            return {"status": "error", "message": str(e)}
