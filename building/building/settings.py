@@ -30,14 +30,14 @@ SITE_NAME = env.str("SITE_NAME", "Rent an Apartment App")
 SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: keep email address password used in production secret!
-EMAIL_HOST = env.str("EMAIL_HOST", "smtp://user:password@localhost:25")
-EMAIL_PORT = env.int("EMAIL_PORT")
-EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+EMAIL_CONFIG = env.email("EMAIL_URL")
+DEFAULT_FROM_EMAIL = "%s <%s>" % (
+    SITE_NAME,
+    env.str("DEFAULT_FROM_EMAIL", "webmaster@localhost"),
+)
 EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL")
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = "%s <%s>" % (SITE_NAME, EMAIL_HOST_USER)
-EMAIL_ADMIN = EMAIL_HOST_USER
+
+vars().update(EMAIL_CONFIG)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
