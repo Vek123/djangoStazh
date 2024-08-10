@@ -35,7 +35,6 @@ DEFAULT_FROM_EMAIL = "%s <%s>" % (
     SITE_NAME,
     env.str("DEFAULT_FROM_EMAIL", "webmaster@localhost"),
 )
-EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL")
 
 vars().update(EMAIL_CONFIG)
 
