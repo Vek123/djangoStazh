@@ -46,3 +46,9 @@ class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Building
         fields = ["address", "name", "year"]
+
+
+class FeedbackFormSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    comment = serializers.CharField()
